@@ -1,0 +1,591 @@
+---
+title             : "Building Representative Norms via Post-Stratification Weighting"
+shorttitle        : "Bulding Norms"
+
+author: 
+  - name          : "John T. Kulas"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "250 Dickson Hall, Montclair State University, 1 Normal Ave., Montclair, NJ 07043"
+    email         : "kulasj@montclair.edu"
+  - name          : "Yang Yang"
+    affiliation   : "2"
+  - name          : "Mike Morris"
+    affiliation   : "3"
+
+affiliation:
+  - id            : "1"
+    institution   : "Montclair State University"
+  - id            : "2"
+    institution   : "China Select"
+  - id            : "3"
+    institution   : "CPP, Inc."
+
+author_note: |
+  This reproducible research project is available for others thanks to rMarkdown and the papaja R package.
+
+abstract: |
+  Large-scale testing organizations benefit from the luxury of being able to strategically sample to construct workforce representative norms. We explore the application of post-stratification weighting as a method to "build" rather than funnel norms. We attempt an alternative approach to norms development, building via post-stratification weighting. This approach is evaluated against "population" values via controlled simulation. Norms are traditionally created through stratified sampling of larger distributions of data. Not all vendors or publishers have this luxury - some do simply not have access to large samples of respondents. We propose an alternative strategy that zeros in on the same goal: representative normative samples. 
+
+  
+keywords          : "Weighting, Norms, Assessment"
+wordcount         : "X"
+
+bibliography      : ["SIOP_2019_1.bib"]
+
+figsintext        : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : no
+mask              : no
+
+class             : "man"
+output            : papaja::apa6_pdf
+
+---
+
+```{r load_packages, include = FALSE}
+library(papaja)
+library(magick)
+library(survey)        ## proportional sampling
+library(ggplot2)
+library(anesrake)
+library(psych)
+library(tidyr)         ## wide to long
+library(plyr)          ## revalue function (to label percentiles in figures)
+library(gridExtra)     ## multiple ggplots one plotting space
+library(descr)
+library(Hmisc)
+## library(descr)         ## temp for frequency distributions (range of discrepancy values)
+
+## library(apaTables)  ## apa_table actually a papaja function
+
+```
+
+```{r analysis_preferences}
+# Seed for random number generation
+set.seed(42)
+```
+
+"Norms" are comparative distributions of psychological or educational assessment scores against which an individual examinee's absolute rating can be contrasted. Common normative metrics include standard scores (often some derivative of a *z*-score) and percentile ranks - both relating an examinee's score to its location within the normative sample (e.g., "norm"). The constituency of normative groups can be a marketable asset for assessment vendors. Possessing norms that include respondents representing competitive organizations might, for example, entice a new client to utilize an assessment for its benchmarking potential. Similarly, one vendor's possession of, for example, workforce representative norms may be a deciding factor regarding consultative partnership if another vendor *does not* have workforce representative norms. 
+
+Assessment "owners" who have access to large numbers of respondents have the luxury of tailoring their norms to a wide variety of desirable constituencies, and would therefore appear to hold advantage over smaller, boutique, or niche consultancies that may not have as much reach or opportunity to develop large norms bases. The OPQ32r, for example, in total possesses 92 unique static normative distributions culled from more than 200 thousand individuals, covering 24 languages and 37 countries/regions, as reported in its Norm Update Technical Documentation [@shl_group_ltd._opq32r_2011]. These norms are further differentiated by general population, general work population, managerial and professional, senior managers, graduate, and industry specific norms. This norm library is an absolute competitive advantage over other local and international vendors. 
+
+Traditionally,[^1] norms are developed in this manner - either simply collecting a very large number of responses (e.g., GRE, ACT, SAT) or stratified random sampling from such a large number of responses (or, more rarely in the context of psychological assessment - a fully representative population frame) to obtain a normative group of desired constituency. In the current paper, we explore an alternative to these traditional approaches whereby representative norm groups are "built up" from smaller respondent samples. We do this via application of a procedure that is intended to align sample constituencies with population parameters in post-survey administration contexts: post-stratification weighting [see, for example, @kulas_post-stratification_2018; @yang_nonresponse_2017]. 
+
+[^1]: Perhaps more appropriately, "*according to textbooks*". There is at least one mention of the currently explored "building up" procedure that is acknowledged in the published literature [@holt_stanford_1993]. It is possible that vendors have been engaging in this creative form of norms creation, but the procedure has not migrated to the published literature.
+
+Although not considered a typical approach, there is at least one record of something similar being done within the educational assessment domain - @holt_stanford_1993 describes one SAT 8th edition reading comprehension subgroup norm as being created via weighting (because of the uniqueness of the desired normative group - age representative deaf and hard of hearing students). This 1993 application is the only one we were able to locate within the published literature. The current investigation resurrects and investigates the viability of this strategy for those interested in creating representative norms (perhaps without the luxury of expansive data collection).
+
+## A Brief Review of the Norms Development Process Implicated within the Measurement Literature
+
+@kinnear_new_2002 describe the development of norms for an eye test, strategically sampling equal numbers of males and females from ages 5 to 79, although the final normative constituency (*N* = 382) was ultimately comprised of individuals who opted in (e.g., a non-probability sample). The Boston Naming Test (BNT) has many age, education [e.g., @tombaugh_60-item_1997] and gender [e.g., @zec_normative_2007] stratified norms generated by various researchers. However, @hawkins_norms_2002 review of available BNT norms revealed that only a few of them were adequately representative of the population and most norms were skewed by highly educated subjects. The norms for the Job Descriptive Index and Job in General measures of job satisfaction have been recently revised via stratified random sampling drawn from an online panel [to represent the US working population on key variables, resulting in the first US overall norms and subgroup norms; @gillespie_normative_2016]. 
+
+Although seeking representative samples from larger populations comprises the traditional approach to norm-building, alternatives have historically been sought (much of this work seems to have peaked [and subsequently perhaps been abandoned] in the 1960's). @lord_estimating_1962 seems to have been one of the first attempts to seek alternative sampling methodologies. He describes a procedure first investigated in a 1961 project for the Educational Testing Service [e.g., ETS; @lord_estimating_1961] essentially sampling items instead of individuals (e.g., what provides a truer approximation of the population distribution - the entire measure administered to one respondent group or item parcels administered to different respondent groups?). In his first exploration, the "item sampling" approach was in fact deemed superior to the more traditional "respondent sampling" strategy, with @lord_estimating_1961 concluding that such a strategy may be enticing to educational assessment professionals because it is less disruptive (administering smaller item sets requires less time commitment). @plumlee_estimating_1964 also administered smaller item subsets to multiple samples of respondants. Both procedures administered smaller item subsets to smaller groups of respondents, and then aggregated from these multiple samples and item sets. The summary finding of each of these studies was that the item subgroup estimates provided better (closer to true normative) estimates than did sub-sample estimates. The current investigation revisits these concepts, but with: 1) controlled simulations, and 2) an alternative sample adjustment procedure (the investigations in the 1960's did not attempt weighting).
+
+# Methods
+
+This SIOP presentation utilizes simulations to test the efficacy of the weighting procedure. Figure 1 communicates our intent: to evaluate the viability of an alternative (C) to the commonly executed (B) norms-development strategy. First, we generate a "population" with known subgroup differences along a measured variable (for example, a summary "engagement" rating per individual), then randomly sample small subsets and build (via post-stratification weighting) representative normative groups. As an index of "how the procedure performs", we evaluate the normative distributions against the original population distributions, documenting which distributions (weighted versus unweighted) approximates the population better.
+
+## Procedure 
+
+Workforce representation was identified via the Bureau of Labor Statistics' Labor Force Statistics from the Current Population Survey [2017 Employed persons by detailed occupation, sex, race, and Hispanic or Latino ethnicity (Table 11); @statistics_cps_2018]. These are approximately 153,337,000 individuals aged 16 and older. The population percentages we specified (at the variable margin levels) are presented in the "Census Parameter" column of Table 1.
+
+"Populations" of 10,000 individuals were constructed with ethnic distributions of values specified as normal, positively skewed, or negatively skewed (in three different *across-group* patterns; see Table 1 - this was done to evaluate the impact of different distributional forms within differently sized subgroups). Occupation and gender were then randomly assigned at census parameters (for example, the 1,000 other, 1,200 black, and 7,800 white respondents were randomly assigned gender and occupational characteristics for purposes of multi-strata rating [e.g., aka "raking"]). From these 10,000 records, a random or stratified random[^2] sampling was performed at *n*'s of 100. The samplings were then raked using the *anesrake* [@pasek_anesrake:_2016] package within *R*. Across the six experimental conditions, populations were specified, sampled from, and raked 10,000 times each (e.g., each of the 60,000 total simulations estimated a different simulated population). 
+
+We varied the distributional forms of the three ethic groups, with the distribution of scores (1 to 5) representing negative (1) to positive (5) attitudes. In condition 1, for example, "Whites" realized a positively skewed distribution, "blacks" were represented with a negatively skewed distribution, and "asians and others" exhibited a normally distributed range of attitudes (Figure 2 presents one population simulation as an example of a Condition 1 set of subgroup distributions). 
+
+To evaluate the "quality" of the random, stratified random, and weighted samples, we collected distributional values at seven different percentile locations: the 5th, 10th, 25th, 50th, 75th, 90th, and 95th percentiles. These values were extracted from: 1) each simulated population, 2) each random or stratified random sampling, and 3) each weighted sample. Our criteria for "quality" of normative distribution was discrepancy from the population distributional values at each of the seven percentiles.
+
+[^2]: These terms are a bit misleading in the context of the current simulations - all samplings were random, but "stratified random" was approximated in conditions 1 through 3 (see Table 1) whereas differentially stratified was specified in conditions 4 through 6 (where we were interested in evaluating the efficacy of the weighting procedure with known biased [in terms of representative constituency] samples).
+
+```{r Figure1, echo=FALSE, fig.cap="Relationship between Study 1 concepts of population (A), traditional norms (B), and proposed norm building procedure (C)."}
+
+
+
+figure <- image_read("http://web.stcloudstate.edu/jtkulas/Figure1.PNG")
+
+grid.raster(figure)
+
+```
+
+
+```{r Figure2, echo=FALSE, fig.cap="Example distributional forms (population specifications Condition 1)."}
+
+x <- runif(7800,0,1)
+pos <- as.data.frame(5-(4*(x^(1/3))))
+pos$ethnic <- NULL
+pos$ethnic <- "white" 
+
+n <- runif(1200,0,1)
+neg <- as.data.frame((4*(n^(1/3)))+1)
+neg$ethnic <- NULL
+neg$ethnic <- "black" 
+
+y <- runif(1000,0,1)
+z <- runif(1000,0,1)
+  
+normal <- as.data.frame(ifelse(y<.5, 1+(sqrt(4*z)), 5-(sqrt(4*z))))
+normal$ethnic <- NULL
+normal$ethnic <- "other"
+
+colnames(pos)[1] <- "value"
+colnames(normal)[1] <- "value"
+colnames(neg)[1] <- "value"
+
+cond2 <- as.data.frame(rbind(pos,normal,neg))
+
+par(mfrow=c(1,3), new=FALSE)
+
+hist(neg$value, breaks=18, main="", xlab="black", xlim=c(1,5))
+hist(pos$value, breaks=18, main="", xlab="white", xlim=c(1,5))
+hist(normal$value, breaks=18, main="", xlab="asian or other", xlim=c(1,5))
+
+
+
+```
+
+The other demographic specifications (occupation and gender) were randomly assigned to the 10,000 ethnic cases (e.g., Table 1 percentages were specified and randomly assigned to cases).
+
+```{r Tab.1, echo=FALSE, results="asis"}
+
+## hangs on my work computer - deleted for now
+
+tab1 <- image_read("http://web.stcloudstate.edu/jtkulas/Table1.PNG")
+
+grid.raster(tab1)
+
+```
+
+# Results
+
+We present the majority of our results visually in Figures 3 through 8. Because of the "busy-ness" of the information within these figures, we present one visual representation of each experimental condition, although every figure conveys the same information: 1) the "population" distribution[^3] (1st row), 2) discrepancies between population and unweighted sample distribution values at each of the 7 retained percentiles (2nd row), and 3) discrepancies between population and *weighted* sample distribution values (3rd row). The x-axis scales on these discrepancy graphs are intentionally asymmetric toward negative discrepancies because our most extreme outliers were negative (although not possible to visually see within the histograms). Negative values indicate a "larger" population than sample value. Conditions 1 through 3 demonstrate that, regardless of distributional form across the small or large constituent groups, if sampling can be reasonably characterized as stratified (e.g., if the sample has representative constituencies), there is no need or indeed added value in weighting the sample (this is admittedly not an exceedingly earth-shattering finding, but if the sample already approximates the population, there is in fact no need for weighting).
+
+```{r simulations, echo=FALSE, cache=TRUE}
+
+## Keeping out for now - just calling on the rbound "together.csv" instead of simulating within rMarkdown
+
+```
+
+```{r Figure3, echo=FALSE, fig.cap="Population percentile locations with unweighted (approximately stratified), and weighted  discrepancy distributions (Condition 1).", fig.dim = c(8, 11), message=FALSE, warning=FALSE, cache=TRUE}
+
+data <- read.csv("http://web.stcloudstate.edu/jtkulas/together.csv")                         ## NOTE simulations kept out of rMarkdown - located in "Cond" .R scripts
+
+
+data$up1.5 <- (data$pop5 - data$samp5)
+data$up1.10 <- (data$pop10 - data$samp10)
+data$up1.25 <- (data$pop25 - data$samp25)
+data$up1.50 <- (data$pop50 - data$samp50)
+data$up1.75 <- (data$pop75 - data$samp75)
+data$up1.90 <- (data$pop90 - data$samp90)
+data$up1.95 <- (data$pop95 - data$samp95)
+data$wp1.5 <- (data$pop5 - data$wsamp5)
+data$wp1.10 <- (data$pop10 - data$wsamp10)
+data$wp1.25 <- (data$pop25 - data$wsamp25)
+data$wp1.50 <- (data$pop50 - data$wsamp50)
+data$wp1.75 <- (data$pop75 - data$wsamp75)
+data$wp1.90 <- (data$pop90 - data$wsamp90)
+data$wp1.95 <- (data$pop95 - data$wsamp95)
+
+#describe(data)
+
+tograph <- data[c(1,24:38)]
+
+#tograph[3] <- round(tograph[3],2)
+#tograph[4] <- round(tograph[4],2)
+#tograph[5] <- round(tograph[5],2)
+#tograph[6] <- round(tograph[6],2)
+#tograph[7] <- round(tograph[7],2)
+#tograph[8] <- round(tograph[8],2)
+#tograph[9] <- round(tograph[9],2)
+#tograph[10] <- round(tograph[10],2)
+#tograph[11] <- round(tograph[11],2)
+#tograph[12] <- round(tograph[12],2)
+#tograph[13] <- round(tograph[13],2)
+#tograph[14] <- round(tograph[14],2)
+#tograph[15] <- round(tograph[15],2)
+#tograph[16] <- round(tograph[16],2)
+
+#describe(tograph)  ## -4 to 1.5 (range)
+
+cond1 <- tograph[c(1:10000),]       ## separate graphs each condition
+cond2 <- tograph[c(10001:20000),]
+cond3 <- tograph[c(20001:30000),]
+cond4 <- tograph[c(30001:40000),]
+cond5 <- tograph[c(40001:50000),]
+cond6 <- tograph[c(50001:60000),]
+
+##  describe(cond1)  ## unweighted 3:9, weighted 10:16
+
+cond.1.u <- cond1[c(1,3:9)]
+cond.1.w <- cond1[c(1,10:16)]
+
+cond.1.u.l <- gather(cond.1.u,percentile,discrepancy,up1.5:up1.95,factor_key=TRUE)
+cond.1.w.l <- gather(cond.1.w,percentile,discrepancy,wp1.5:wp1.95,factor_key=TRUE)
+
+cond.1.u.l$percentile <- revalue(cond.1.u.l$percentile, c("up1.5"="5th %ile", "up1.10"="10th %ile","up1.25"="25th %ile",
+                                                          "up1.50"="50th %ile","up1.75"="75th %ile","up1.90"="90th %ile",
+                                                          "up1.95"="95th %ile"))
+
+cond.1.w.l$percentile <- revalue(cond.1.w.l$percentile, c("wp1.5"="5th %ile", "wp1.10"="10th %ile","wp1.25"="25th %ile",
+                                                          "wp1.50"="50th %ile","wp1.75"="75th %ile","wp1.90"="90th %ile",
+                                                          "wp1.95"="95th %ile"))
+
+pu1 <- ggplot(cond.1.u.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="green") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Unweighted Discrepancies (Green)")
+
+pw1 <- ggplot(cond.1.w.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="blue") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Weighted Discrepancies (Blue)")
+
+## population
+
+## Condition 1
+
+x <- runif(7800,0,1)
+pos <- as.data.frame(5-(4*(x^(1/3))))
+
+n <- runif(1200,0,1)
+neg <- as.data.frame((4*(n^(1/3)))+1)
+
+y <- runif(1000,0,1)
+z <- runif(1000,0,1)
+
+normal <- as.data.frame(ifelse(y<.5, 1+(sqrt(4*z)), 5-(sqrt(4*z))))
+
+colnames(pos)[1] <- "value"
+colnames(normal)[1] <- "value"
+colnames(neg)[1] <- "value"
+
+cond1 <- as.data.frame(rbind(pos,normal,neg))
+
+cond1.frame <- ggplot(cond1, aes(x=value)) +
+  geom_density(fill="blue", alpha=.2,size=3) + 
+  scale_x_continuous(breaks=c(1.05,1.2,1.45,2,2.9,3.7,4.3),
+                     labels=c("5th %ile", "10th %ile", "25th %ile", "50th %ile",
+                              "75th %ile", "90th %ile", "95th %ile")) + 
+  geom_text(x=2,y=.15, label="Frame\nCondition 1",size=7) +
+  theme(axis.title.x=element_blank()) + 
+  theme(axis.text.x=element_text(angle=30,hjust=1,vjust=1))
+
+
+grid.arrange(cond1.frame, pu1, pw1, nrow = 3)
+
+
+```
+
+```{r Figure4, echo=FALSE, fig.cap="Population percentile locations with unweighted (approximately stratified), and weighted  discrepancy distributions (Condition 2).", fig.dim = c(8, 10), message=FALSE, warning=FALSE, cache=TRUE}
+
+
+##  describe(cond2)  ## unweighted 3:9, weighted 10:16
+cond2.u <- cond2[c(1,3:9)]
+cond2.w <- cond2[10:16]
+
+cond2.u.l <- gather(cond2.u,percentile,discrepancy,up1.5:up1.95,factor_key=TRUE)
+cond2.w.l <- gather(cond2.w,percentile,discrepancy,wp1.5:wp1.95,factor_key=TRUE)
+
+cond2.u.l$percentile <- revalue(cond2.u.l$percentile, c("up1.5"="5th %ile", "up1.10"="10th %ile","up1.25"="25th %ile",
+                                                        "up1.50"="50th %ile","up1.75"="75th %ile","up1.90"="90th %ile",
+                                                        "up1.95"="95th %ile"))
+
+cond2.w.l$percentile <- revalue(cond2.w.l$percentile, c("wp1.5"="5th %ile", "wp1.10"="10th %ile","wp1.25"="25th %ile",
+                                                        "wp1.50"="50th %ile","wp1.75"="75th %ile","wp1.90"="90th %ile",
+                                                        "wp1.95"="95th %ile"))
+
+pu2 <- ggplot(cond2.u.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="green") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Unweighted Discrepancies (Green)")
+
+pw2 <- ggplot(cond2.w.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="blue") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Weighted Discrepancies (Blue)")
+
+x <- runif(1200,0,1)
+pos <- as.data.frame(5-(4*(x^(1/3))))
+
+n <- runif(1000,0,1)
+neg <- as.data.frame((4*(n^(1/3)))+1)
+
+y <- runif(7800,0,1)
+z <- runif(7800,0,1)
+
+normal <- as.data.frame(ifelse(y<.5, 1+(sqrt(4*z)), 5-(sqrt(4*z))))
+
+colnames(pos)[1] <- "value"
+colnames(normal)[1] <- "value"
+colnames(neg)[1] <- "value"
+
+cond2 <- as.data.frame(rbind(pos,normal,neg))
+
+
+cond2.frame <- ggplot(cond2, aes(x=value)) +
+  geom_density(fill="green", alpha=.2,size=3) + 
+  scale_x_continuous(breaks=c(1.3,1.6,2.2,2.9,3.6,4.1,4.5),
+                     labels=c("5th %ile", "10th %ile", "25th %ile", "50th %ile",
+                              "75th %ile", "90th %ile", "95th %ile")) + 
+  geom_text(x=3,y=.15, label="Frame\nCondition 2",size=7) +
+  theme(axis.title.x=element_blank()) + 
+  theme(axis.text.x=element_text(angle=30,hjust=1,vjust=1))
+
+
+grid.arrange(cond2.frame, pu2, pw2, nrow = 3)
+
+```
+
+```{r Figure5, echo=FALSE, fig.cap="Population percentile locations with unweighted (approximately stratified), and weighted  discrepancy distributions (Condition 3).", fig.dim = c(8, 10), message=FALSE, warning=FALSE, cache=TRUE}
+
+cond3.u <- cond3[c(1,3:9)]
+cond3.w <- cond3[10:16]
+
+cond3.u.l <- gather(cond3.u,percentile,discrepancy,up1.5:up1.95,factor_key=TRUE)
+cond3.w.l <- gather(cond3.w,percentile,discrepancy,wp1.5:wp1.95,factor_key=TRUE)
+
+cond3.u.l$percentile <- revalue(cond3.u.l$percentile, c("up1.5"="5th %ile", "up1.10"="10th %ile","up1.25"="25th %ile",
+                                                        "up1.50"="50th %ile","up1.75"="75th %ile","up1.90"="90th %ile",
+                                                        "up1.95"="95th %ile"))
+
+cond3.w.l$percentile <- revalue(cond3.w.l$percentile, c("wp1.5"="5th %ile", "wp1.10"="10th %ile","wp1.25"="25th %ile",
+                                                        "wp1.50"="50th %ile","wp1.75"="75th %ile","wp1.90"="90th %ile",
+                                                        "wp1.95"="95th %ile"))
+
+pu3 <- ggplot(cond3.u.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="green") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Unweighted Discrepancies (Green)")
+
+pw3 <- ggplot(cond3.w.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="blue") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Weighted Discrepancies (Blue)")
+
+
+x <- runif(1000,0,1)
+pos <- as.data.frame(5-(4*(x^(1/3))))
+
+n <- runif(7800,0,1)
+neg <- as.data.frame((4*(n^(1/3)))+1)
+
+y <- runif(1200,0,1)
+z <- runif(1200,0,1)
+
+normal <- as.data.frame(ifelse(y<.5, 1+(sqrt(4*z)), 5-(sqrt(4*z))))
+
+colnames(pos)[1] <- "value"
+colnames(normal)[1] <- "value"
+colnames(neg)[1] <- "value"
+
+cond3 <- as.data.frame(rbind(pos,normal,neg))
+
+
+cond3.frame <- ggplot(cond3, aes(x=value)) +
+  geom_density(fill="yellow", alpha=.2,size=3) + 
+  scale_x_continuous(breaks=c(1.6,2,2.9,3.8,4.4,4.8,4.9),
+                     labels=c("5th %ile", "10th %ile", "25th %ile", "50th %ile",
+                              "75th %ile", "90th %ile", "95th %ile")) + 
+  geom_text(x=4.2,y=.15, label="Frame\nCondition 3",size=7) +
+  theme(axis.title.x=element_blank()) + 
+  theme(axis.text.x=element_text(angle=30,hjust=1,vjust=1))
+
+grid.arrange(cond3.frame, pu3, pw3, nrow = 3)
+
+```
+
+```{r Figure6, echo=FALSE, fig.cap="Population percentile locations with unweighted (disproportionate), and weighted  discrepancy distributions (Condition 4).", fig.dim = c(8, 10), message=FALSE, warning=FALSE, cache=TRUE}
+
+
+cond4.u <- cond4[c(1,3:9)]
+cond4.w <- cond4[10:16]
+
+fdistsu <- round(cond4.u,2)
+fdistsw <- round(cond4.u,2)
+
+cond4.u.l <- gather(cond4.u,percentile,discrepancy,up1.5:up1.95,factor_key=TRUE)
+cond4.w.l <- gather(cond4.w,percentile,discrepancy,wp1.5:wp1.95,factor_key=TRUE)
+
+cond4.u.l$percentile <- revalue(cond4.u.l$percentile, c("up1.5"="5th %ile", "up1.10"="10th %ile","up1.25"="25th %ile",
+                                                        "up1.50"="50th %ile","up1.75"="75th %ile","up1.90"="90th %ile",
+                                                        "up1.95"="95th %ile"))
+
+cond4.w.l$percentile <- revalue(cond4.w.l$percentile, c("wp1.5"="5th %ile", "wp1.10"="10th %ile","wp1.25"="25th %ile",
+                                                        "wp1.50"="50th %ile","wp1.75"="75th %ile","wp1.90"="90th %ile",
+                                                        "wp1.95"="95th %ile"))
+
+pu4 <- ggplot(cond4.u.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="green") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Unweighted Discrepancies Cond 4 (Green)")
+
+pw4 <- ggplot(cond4.w.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="blue") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Weighted Discrepancies Cond 4 (Blue)")
+
+## COND 4
+
+x <- runif(7800,0,1)
+pos <- as.data.frame(5-(4*(x^(1/3))))
+
+n <- runif(1200,0,1)
+neg <- as.data.frame((4*(n^(1/3)))+1)
+
+y <- runif(1000,0,1)
+z <- runif(1000,0,1)
+
+normal <- as.data.frame(ifelse(y<.5, 1+(sqrt(4*z)), 5-(sqrt(4*z))))
+
+colnames(pos)[1] <- "value"
+colnames(normal)[1] <- "value"
+colnames(neg)[1] <- "value"
+
+cond1 <- as.data.frame(rbind(pos,normal,neg))
+
+cond4.frame <- ggplot(cond1, aes(x=value)) +
+  geom_density(fill="blue", alpha=.2,size=3) + 
+  scale_x_continuous(breaks=c(1.05,1.2,1.45,2,2.9,3.7,4.3),
+                     labels=c("5th %ile", "10th %ile", "25th %ile", "50th %ile",
+                              "75th %ile", "90th %ile", "95th %ile")) + 
+  geom_text(x=2,y=.15, label="Frame\nCondition 4",size=7) +
+  theme(axis.title.x=element_blank()) + 
+  theme(axis.text.x=element_text(angle=30,hjust=1,vjust=1))
+
+grid.arrange(cond4.frame, pu4, pw4, nrow = 3)
+
+```
+
+
+```{r Figure7, echo=FALSE, fig.cap="Population percentile locations with unweighted (disproportionate), and weighted  discrepancy distributions (Condition 5).", fig.dim = c(8, 10), message=FALSE, warning=FALSE, cache=TRUE}
+
+
+cond5.u <- cond5[c(1,3:9)]
+cond5.w <- cond5[10:16]
+
+cond5.u.l <- gather(cond5.u,percentile,discrepancy,up1.5:up1.95,factor_key=TRUE)
+cond5.w.l <- gather(cond5.w,percentile,discrepancy,wp1.5:wp1.95,factor_key=TRUE)
+
+cond5.u.l$percentile <- revalue(cond5.u.l$percentile, c("up1.5"="5th %ile", "up1.10"="10th %ile","up1.25"="25th %ile",
+                                                        "up1.50"="50th %ile","up1.75"="75th %ile","up1.90"="90th %ile",
+                                                        "up1.95"="95th %ile"))
+
+cond5.w.l$percentile <- revalue(cond5.w.l$percentile, c("wp1.5"="5th %ile", "wp1.10"="10th %ile","wp1.25"="25th %ile",
+                                                        "wp1.50"="50th %ile","wp1.75"="75th %ile","wp1.90"="90th %ile",
+                                                        "wp1.95"="95th %ile"))
+
+pu5 <- ggplot(cond5.u.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="green") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Unweighted Discrepancies Cond 5 (Green)")
+
+pw5 <- ggplot(cond5.w.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="blue") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Weighted Discrepancies Cond 5 (Blue)")
+
+
+x <- runif(1200,0,1)
+pos <- as.data.frame(5-(4*(x^(1/3))))
+
+n <- runif(1000,0,1)
+neg <- as.data.frame((4*(n^(1/3)))+1)
+
+y <- runif(7800,0,1)
+z <- runif(7800,0,1)
+
+normal <- as.data.frame(ifelse(y<.5, 1+(sqrt(4*z)), 5-(sqrt(4*z))))
+
+colnames(pos)[1] <- "value"
+colnames(normal)[1] <- "value"
+colnames(neg)[1] <- "value"
+
+cond2 <- as.data.frame(rbind(pos,normal,neg))
+
+
+cond5.frame <- ggplot(cond2, aes(x=value)) +
+  geom_density(fill="green", alpha=.2,size=3) + 
+  scale_x_continuous(breaks=c(1.3,1.6,2.2,2.9,3.6,4.1,4.5),
+                     labels=c("5th %ile", "10th %ile", "25th %ile", "50th %ile",
+                              "75th %ile", "90th %ile", "95th %ile")) + 
+  geom_text(x=3,y=.15, label="Frame\nCondition 5",size=7) +
+  theme(axis.title.x=element_blank()) + 
+  theme(axis.text.x=element_text(angle=30,hjust=1,vjust=1))
+
+grid.arrange(cond5.frame, pu5, pw5, nrow = 3)
+
+```
+
+
+```{r Figure8, echo=FALSE, fig.cap="Population percentile locations with unweighted (disproportionate), and weighted  discrepancy distributions (Condition 6).", fig.dim = c(8, 10), message=FALSE, warning=FALSE, cache=TRUE}
+
+
+cond6.u <- cond6[c(1,3:9)]
+cond6.w <- cond6[10:16]
+
+cond6.u.l <- gather(cond6.u,percentile,discrepancy,up1.5:up1.95,factor_key=TRUE)
+cond6.w.l <- gather(cond6.w,percentile,discrepancy,wp1.5:wp1.95,factor_key=TRUE)
+
+cond6.u.l$percentile <- revalue(cond6.u.l$percentile, c("up1.5"="5th %ile", "up1.10"="10th %ile","up1.25"="25th %ile",
+                                                        "up1.50"="50th %ile","up1.75"="75th %ile","up1.90"="90th %ile",
+                                                        "up1.95"="95th %ile"))
+
+cond6.w.l$percentile <- revalue(cond6.w.l$percentile, c("wp1.5"="5th %ile", "wp1.10"="10th %ile","wp1.25"="25th %ile",
+                                                        "wp1.50"="50th %ile","wp1.75"="75th %ile","wp1.90"="90th %ile",
+                                                        "wp1.95"="95th %ile"))
+
+pu6 <- ggplot(cond6.u.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="green") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Unweighted Discrepancies Cond 6 (Green)")
+
+pw6 <- ggplot(cond6.w.l, aes(x=discrepancy)) + geom_histogram(binwidth=.05, fill="blue") + 
+  xlim(-4, 1.5) + theme(legend.position="none")+
+  facet_wrap( ~ percentile, nrow = 1) + xlab("Weighted Discrepancies Cond 6 (Blue)")
+
+
+x <- runif(1000,0,1)
+pos <- as.data.frame(5-(4*(x^(1/3))))
+
+n <- runif(7800,0,1)
+neg <- as.data.frame((4*(n^(1/3)))+1)
+
+y <- runif(1200,0,1)
+z <- runif(1200,0,1)
+
+normal <- as.data.frame(ifelse(y<.5, 1+(sqrt(4*z)), 5-(sqrt(4*z))))
+
+colnames(pos)[1] <- "value"
+colnames(normal)[1] <- "value"
+colnames(neg)[1] <- "value"
+
+cond3 <- as.data.frame(rbind(pos,normal,neg))
+
+
+cond6.frame <- ggplot(cond3, aes(x=value)) +
+  geom_density(fill="yellow", alpha=.2,size=3) + 
+  scale_x_continuous(breaks=c(1.6,2,2.9,3.8,4.4,4.8,4.9),
+                     labels=c("5th %ile", "10th %ile", "25th %ile", "50th %ile",
+                              "75th %ile", "90th %ile", "95th %ile")) + 
+  geom_text(x=4.2,y=.15, label="Frame\nCondition 6",size=7) +
+  theme(axis.title.x=element_blank()) + 
+  theme(axis.text.x=element_text(angle=30,hjust=1,vjust=1))
+
+grid.arrange(cond6.frame, pu6, pw6, nrow = 3)
+
+```
+
+Conditions 4 through 6, however (Figures 6 through 8) demonstrate that weighted normative distributions do far exceed the quality of randomly sampled distributions if those random samplings result in subgroup proportional inconsistencies (e.g., not representative constituency). The narrow nature of these distributions of discrepancies (regardless of whether the distribution is weighted or unweighted) shows that the samplings result in largely similar values across the 10,000 simulations. The *location* of the distributions, however, highlights the advantage of weighting: the unweighted samples deviate from centering on a value of zero (zero indicates a population-sample match at the percentile of focus). Discrepancy distributions centering on non-zero values represent *bias* in the normative values. In all three conditions where bias was present (at at least one percentile location), performing the weighting corrected this bias.
+
+[^3]: These are labeled "frames" within Figures 4 through 9 as these simulated distributions could be viewed as representations of either true populations or population frames. 
+
+# Discussion
+
+Post-stratification weighting does appear to hold some promise as a norms-building strategy. Particularly in situations where frames (or even merely larger samples) are not proportionally representative of populations, the weighting procedure effectively reproduces the output of stratified sampling: producing a proportionally representative sample distribution. We attempted to introduce large constituent group differences in distributional forms (within the "populations") as a challenge to the weighting procedure, but, as long as strata are properly identified (along which value distributions may vary), the resulting weighted distribution does do a very good job at representing the population distribution (much better than does the unweighted normative distribution). Future investigations should introduce additional discrepancies (both distributional as well as subgroup proportional) to further test the boundaries of the procedure. Attempts to "construct" representative norms with real-world data are also warrented.
+
+\newpage
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup
+
+
