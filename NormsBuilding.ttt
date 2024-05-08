@@ -1,0 +1,43 @@
+\begin{lltable}
+
+\begin{TableNotes}[para]
+\normalsize{\textit{Note.} Cell-level constituencies (e.g., percentage white male managers) were not available via census data.}
+\end{TableNotes}
+
+\footnotesize{
+
+\begin{longtable}{llllllllll}\noalign{\getlongtablewidth\global\LTcapwidth=\longtablewidth}
+\caption{\label{tab:Tab.1}}\\
+\toprule
+Variable & Level & Census
+Parameter & Cond 1 & Cond 2 & Cond 3 & Sampling
+Frequency & Cond 4 & Cond 5 & Cond 6\\
+\midrule
+\endfirsthead
+\caption*{\normalfont{Table \ref{tab:Tab.1} continued}}\\
+\toprule
+Variable & Level & Census
+Parameter & Cond 1 & Cond 2 & Cond 3 & Sampling
+Frequency & Cond 4 & Cond 5 & Cond 6\\
+\midrule
+\endhead
+Gender & Male & 53\% &  &  &  &  &  &  & \\
+ & Female & 47\% &  &  &  &  &  &  & \\
+ &  &  &  &  &  &  &  &  & \\
+Ethnicity & White & 78\% & Pos Skew & Normal & Neg Skew & 33\% & Pos Skew & Normal & Neg Skew\\
+ & Black & 12\% & Neg Skew & Pos Skew & Normal & 33\% & Neg Skew & Pos Skew & Normal\\
+ & Asian or Other & 10\% & Normal & Neg Skew & Pos Skew & 34\% & Normal & Neg Skew & Pos Skew\\
+ &  &  &  &  &  &  &  &  & \\
+Industry & Management & 40\% &  &  &  &  &  &  & \\
+ & Sales & 22\% &  &  &  &  &  &  & \\
+ & Service & 17\% &  &  &  &  &  &  & \\
+ & Production & 12\% &  &  &  &  &  &  & \\
+ & Natural Resources & 9\% &  &  &  &  &  &  & \\
+\bottomrule
+\addlinespace
+\insertTableNotes
+\end{longtable}
+
+}
+
+\end{lltable}
