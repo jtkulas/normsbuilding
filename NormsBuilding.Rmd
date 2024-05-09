@@ -1,5 +1,5 @@
 ---
-title             : "Building Representative Norms via Post-Stratification Weighting"
+title             : "Representative Norm Construction via Post-Stratification Weighting"
 shorttitle        : "Bulding Norms"
 
 author: 
@@ -19,16 +19,16 @@ affiliation:
   - id            : "2"
     institution   : "China Select"
   - id            : "3"
-    institution   : "CPP, Inc."
+    institution   : "CPP Inc"
 
 author_note: |
   This reproducible research project is available for others thanks to rMarkdown and the papaja R package.
 
 abstract: |
-  Large-scale testing organizations benefit from the luxury of being able to strategically sample to construct workforce representative norms. We explore the application of post-stratification weighting as a method to "build" rather than funnel norms. We attempt an alternative approach to norms development, building via post-stratification weighting. This approach is evaluated against "population" values via controlled simulation. Norms are traditionally created through stratified sampling of larger distributions of data. Not all vendors or publishers have this luxury - some do simply not have access to large samples of respondents. We propose an alternative strategy that zeros in on the same goal: representative normative samples. 
+  Organizations that manage large-scale testing and assessment operations benefit from opportunities to strategically sample to construct norms that are representative of target populations (e.g., US workforce, college graduate, elementary school grade equivalent). We propose the application of a procedure most commonly retained as sample remediation (post-stratification weighting) as a method to "build" rather than funnel norms. This approach is leveraged and then evaluated against "population" values via controlled simulation. Norms are traditionally created through stratified sampling of larger distributions of data. Not all vendors or publishers have this luxury - some do simply not have access to large samples of respondents. We propose an alternative strategy that zeros in on the same goal: representative normative samples. 
 
   
-keywords          : "Weighting, Norms, Assessment"
+keywords          : "assessment norms, post stratification weighting, norm construction, comparative norms"
 wordcount         : "X"
 
 bibliography      : ["SIOP_2019_1.bib", "r-references.bib"]
@@ -40,6 +40,8 @@ footnotelist      : no
 lineno            : no
 mask              : no
 
+csl               : "apa7.csl"
+documentclass     : "apa7"
 class             : "man"
 output            : papaja::apa6_pdf
 

@@ -5,6 +5,8 @@
 \includegraphics{NormsBuilding_files/figure-latex/Figure1-1.pdf}
 \caption{\label{fig:Figure1}Relationship between Study 1 concepts of population (A), traditional norms (B), and proposed norm building procedure (C).}
 \end{figure*}
+\efloatseparator
+ 
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
@@ -12,6 +14,8 @@
 \includegraphics{NormsBuilding_files/figure-latex/Figure2-1.pdf}
 \caption{\label{fig:Figure2}Example distributional forms (population specifications Condition 1).}
 \end{figure*}
+\efloatseparator
+ 
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
@@ -19,6 +23,8 @@
 \includegraphics{NormsBuilding_files/figure-latex/Figure3-1.pdf}
 \caption{\label{fig:Figure3}Population percentile locations with unweighted (approximately stratified), and weighted discrepancy distributions (Condition 1).}
 \end{figure*}
+\efloatseparator
+ 
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
@@ -26,6 +32,8 @@
 \includegraphics{NormsBuilding_files/figure-latex/Figure4-1.pdf}
 \caption{\label{fig:Figure4}Population percentile locations with unweighted (approximately stratified), and weighted discrepancy distributions (Condition 2).}
 \end{figure*}
+\efloatseparator
+ 
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
@@ -33,6 +41,8 @@
 \includegraphics{NormsBuilding_files/figure-latex/Figure5-1.pdf}
 \caption{\label{fig:Figure5}Population percentile locations with unweighted (approximately stratified), and weighted discrepancy distributions (Condition 3).}
 \end{figure*}
+\efloatseparator
+ 
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
@@ -40,6 +50,8 @@
 \includegraphics{NormsBuilding_files/figure-latex/Figure6-1.pdf}
 \caption{\label{fig:Figure6}Population percentile locations with unweighted (disproportionate), and weighted discrepancy distributions (Condition 4).}
 \end{figure*}
+\efloatseparator
+ 
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
@@ -47,6 +59,8 @@
 \includegraphics{NormsBuilding_files/figure-latex/Figure7-1.pdf}
 \caption{\label{fig:Figure7}Population percentile locations with unweighted (disproportionate), and weighted discrepancy distributions (Condition 5).}
 \end{figure*}
+\efloatseparator
+ 
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 

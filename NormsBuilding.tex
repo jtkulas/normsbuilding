@@ -3,7 +3,7 @@
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
-  ,man]{apa6}
+  ,man]{apa7}
 \usepackage{amsmath,amssymb}
 \usepackage{iftex}
 \ifPDFTeX
@@ -158,7 +158,7 @@
     {}{\InnerPatchFailed}%
   }
 {}{\PatchFailed}
-\keywords{Weighting, Norms, Assessment\newline\indent Word count: X}
+\keywords{assessment norms, post stratification weighting, norm construction, comparative norms\newline\indent Word count: X}
 \DeclareDelayedFloatFlavor{ThreePartTable}{table}
 \DeclareDelayedFloatFlavor{lltable}{table}
 \DeclareDelayedFloatFlavor*{longtable}{table}
@@ -173,14 +173,14 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Building Representative Norms via Post-Stratification Weighting},
+  pdftitle={Representative Norm Construction via Post-Stratification Weighting},
   pdfauthor={John T. Kulas1, Yang Yang2, \& Mike Morris3},
   pdflang={en-EN},
-  pdfkeywords={Weighting, Norms, Assessment},
+  pdfkeywords={assessment norms, post stratification weighting, norm construction, comparative norms},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Building Representative Norms via Post-Stratification Weighting}
+\title{Representative Norm Construction via Post-Stratification Weighting}
 \author{John T. Kulas\textsuperscript{1}, Yang Yang\textsuperscript{2}, \& Mike Morris\textsuperscript{3}}
 \date{}
 
@@ -193,10 +193,10 @@ Correspondence concerning this article should be addressed to John T. Kulas, 250
 
 }
 
-\affiliation{\vspace{0.5cm}\textsuperscript{1} Montclair State University\\\textsuperscript{2} China Select\\\textsuperscript{3} CPP, Inc.}
+\affiliation{\vspace{0.5cm}\textsuperscript{1} Montclair State University\\\textsuperscript{2} China Select\\\textsuperscript{3} CPP Inc}
 
 \abstract{%
-Large-scale testing organizations benefit from the luxury of being able to strategically sample to construct workforce representative norms. We explore the application of post-stratification weighting as a method to ``build'' rather than funnel norms. We attempt an alternative approach to norms development, building via post-stratification weighting. This approach is evaluated against ``population'' values via controlled simulation. Norms are traditionally created through stratified sampling of larger distributions of data. Not all vendors or publishers have this luxury - some do simply not have access to large samples of respondents. We propose an alternative strategy that zeros in on the same goal: representative normative samples.
+Organizations that manage large-scale testing and assessment operations benefit from opportunities to strategically sample to construct norms that are representative of target populations (e.g., US workforce, college graduate, elementary school grade equivalent). We propose the application of a procedure most commonly retained as sample remediation (post-stratification weighting) as a method to ``build'' rather than funnel norms. This approach is leveraged and then evaluated against ``population'' values via controlled simulation. Norms are traditionally created through stratified sampling of larger distributions of data. Not all vendors or publishers have this luxury - some do simply not have access to large samples of respondents. We propose an alternative strategy that zeros in on the same goal: representative normative samples.
 }
 
 
@@ -208,16 +208,16 @@ Large-scale testing organizations benefit from the luxury of being able to strat
 
 Assessment ``owners'' who have access to large numbers of respondents have the luxury of tailoring their norms to a wide variety of desirable constituencies, and would therefore appear to hold advantage over smaller, boutique, or niche consultancies that may not have as much reach or opportunity to develop large norms bases. The OPQ32r, for example, in total possesses 92 unique static normative distributions culled from more than 200 thousand individuals, covering 24 languages and 37 countries/regions, as reported in its Norm Update Technical Documentation (Ltd., 2011). These norms are further differentiated by general population, general work population, managerial and professional, senior managers, graduate, and industry specific norms. This norm library is an absolute competitive advantage over other local and international vendors.
 
-Traditionally,\footnote{Perhaps more appropriately, ``\emph{according to textbooks}''. There is at least one mention of the currently explored ``building up'' procedure that is acknowledged in the published literature (Holt, 1993). It is possible that vendors have been engaging in this creative form of norms creation, but the procedure has not migrated to the published literature.} norms are developed in this manner - either simply collecting a very large number of responses (e.g., GRE, ACT, SAT) or stratified random sampling from such a large number of responses (or, more rarely in the context of psychological assessment - a fully representative population frame) to obtain a normative group of desired constituency. In the current paper, we explore an alternative to these traditional approaches whereby representative norm groups are ``built up'' from smaller respondent samples. We do this via application of a procedure that is intended to align sample constituencies with population parameters in post-survey administration contexts: post-stratification weighting (see, for example, Kulas, Robinson, Smith, \& Kellar, 2018; Yang, Kulas, \& Robinson, 2017).
+Traditionally,\footnote{Perhaps more appropriately, ``\emph{according to textbooks}''. There is at least one mention of the currently explored ``building up'' procedure that is acknowledged in the published literature (Holt, 1993). It is possible that vendors have been engaging in this creative form of norms creation, but the procedure has not migrated to the published literature.} norms are developed in this manner - either simply collecting a very large number of responses (e.g., GRE, ACT, SAT) or stratified random sampling from such a large number of responses (or, more rarely in the context of psychological assessment - a fully representative population frame) to obtain a normative group of desired constituency. In the current paper, we explore an alternative to these traditional approaches whereby representative norm groups are ``built up'' from smaller respondent samples. We do this via application of a procedure that is intended to align sample constituencies with population parameters in post-survey administration contexts: post-stratification weighting (see, for example, Kulas et al., 2018; Yang et al., 2017).
 
 Although not considered a typical approach, there is at least one record of something similar being done within the educational assessment domain - Holt (1993) describes one SAT 8th edition reading comprehension subgroup norm as being created via weighting (because of the uniqueness of the desired normative group - age representative deaf and hard of hearing students). This 1993 application is the only one we were able to locate within the published literature. The current investigation resurrects and investigates the viability of this strategy for those interested in creating representative norms (perhaps without the luxury of expansive data collection).
 
 \hypertarget{a-brief-review-of-the-norms-development-process-implicated-within-the-measurement-literature}{%
 \subsection{A Brief Review of the Norms Development Process Implicated within the Measurement Literature}\label{a-brief-review-of-the-norms-development-process-implicated-within-the-measurement-literature}}
 
-Kinnear and Sahraie (2002) describe the development of norms for an eye test, strategically sampling equal numbers of males and females from ages 5 to 79, although the final normative constituency (\emph{N} = 382) was ultimately comprised of individuals who opted in (e.g., a non-probability sample). The Boston Naming Test (BNT) has many age, education (e.g., Tombaugh \& Hubiey, 1997) and gender (e.g., Zec, Burkett, Markwell, \& Larsen, 2007) stratified norms generated by various researchers. However, Hawkins and Bender (2002) review of available BNT norms revealed that only a few of them were adequately representative of the population and most norms were skewed by highly educated subjects. The norms for the Job Descriptive Index and Job in General measures of job satisfaction have been recently revised via stratified random sampling drawn from an online panel {[}to represent the US working population on key variables, resulting in the first US overall norms and subgroup norms; Gillespie et al. (2016){]}.
+Kinnear and Sahraie (2002) describe the development of norms for an eye test, strategically sampling equal numbers of males and females from ages 5 to 79, although the final normative constituency (\emph{N} = 382) was ultimately comprised of individuals who opted in (e.g., a non-probability sample). The Boston Naming Test (BNT) has many age, education (e.g., Tombaugh \& Hubiey, 1997) and gender (e.g., Zec et al., 2007) stratified norms generated by various researchers. However, Hawkins and Bender (2002) review of available BNT norms revealed that only a few of them were adequately representative of the population and most norms were skewed by highly educated subjects. The norms for the Job Descriptive Index and Job in General measures of job satisfaction have been recently revised via stratified random sampling drawn from an online panel {[}to represent the US working population on key variables, resulting in the first US overall norms and subgroup norms; Gillespie et al. (2016){]}.
 
-Although seeking representative samples from larger populations comprises the traditional approach to norm-building, alternatives have historically been sought (much of this work seems to have peaked {[}and subsequently perhaps been abandoned{]} in the 1960's). Frederic M. Lord (1962) seems to have been one of the first attempts to seek alternative sampling methodologies. He describes a procedure first investigated in a 1961 project for the Educational Testing Service {[}e.g., ETS; Frederic M. Lord (1961){]} essentially sampling items instead of individuals (e.g., what provides a truer approximation of the population distribution - the entire measure administered to one respondent group or item parcels administered to different respondent groups?). In his first exploration, the ``item sampling'' approach was in fact deemed superior to the more traditional ``respondent sampling'' strategy, with Frederic M. Lord (1961) concluding that such a strategy may be enticing to educational assessment professionals because it is less disruptive (administering smaller item sets requires less time commitment). Plumlee (1964) also administered smaller item subsets to multiple samples of respondants. Both procedures administered smaller item subsets to smaller groups of respondents, and then aggregated from these multiple samples and item sets. The summary finding of each of these studies was that the item subgroup estimates provided better (closer to true normative) estimates than did sub-sample estimates. The current investigation revisits these concepts, but with: 1) controlled simulations, and 2) an alternative sample adjustment procedure (the investigations in the 1960's did not attempt weighting).
+Although seeking representative samples from larger populations comprises the traditional approach to norm-building, alternatives have historically been sought (much of this work seems to have peaked {[}and subsequently perhaps been abandoned{]} in the 1960's). Lord (1962) seems to have been one of the first attempts to seek alternative sampling methodologies. He describes a procedure first investigated in a 1961 project for the Educational Testing Service {[}e.g., ETS; Lord (1961){]} essentially sampling items instead of individuals (e.g., what provides a truer approximation of the population distribution - the entire measure administered to one respondent group or item parcels administered to different respondent groups?). In his first exploration, the ``item sampling'' approach was in fact deemed superior to the more traditional ``respondent sampling'' strategy, with Lord (1961) concluding that such a strategy may be enticing to educational assessment professionals because it is less disruptive (administering smaller item sets requires less time commitment). Plumlee (1964) also administered smaller item subsets to multiple samples of respondants. Both procedures administered smaller item subsets to smaller groups of respondents, and then aggregated from these multiple samples and item sets. The summary finding of each of these studies was that the item subgroup estimates provided better (closer to true normative) estimates than did sub-sample estimates. The current investigation revisits these concepts, but with: 1) controlled simulations, and 2) an alternative sample adjustment procedure (the investigations in the 1960's did not attempt weighting).
 
 \hypertarget{methods}{%
 \section{Methods}\label{methods}}
@@ -353,7 +353,7 @@ Post-stratification weighting does appear to hold some promise as a norms-buildi
 \hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
 \leavevmode\vadjust pre{\hypertarget{ref-gillespie2016normative}{}}%
-Gillespie, M. A., Balzer, W. K., Brodke, M. H., Garza, M., Gerbec, E. N., Gillespie, J. Z., et al.others. (2016). Normative measurement of job satisfaction in the US. \emph{Journal of Managerial Psychology}, \emph{31}(2), 516--536.
+Gillespie, M. A., Balzer, W. K., Brodke, M. H., Garza, M., Gerbec, E. N., Gillespie, J. Z., Gopalkrishnan, P., Lengyel, J. S., Sliter, K. A., Sliter, M. T., et al. (2016). Normative measurement of job satisfaction in the US. \emph{Journal of Managerial Psychology}, \emph{31}(2), 516--536.
 
 \leavevmode\vadjust pre{\hypertarget{ref-hawkins2002norms}{}}%
 Hawkins, K. A., \& Bender, S. (2002). Norms and the relationship of boston naming test performance to vocabulary and education: A review. \emph{Aphasiology}, \emph{16}(12), 1143--1153.
@@ -362,34 +362,34 @@ Hawkins, K. A., \& Bender, S. (2002). Norms and the relationship of boston namin
 Holt, J. A. (1993). Stanford achievement test---8th edition: Reading comprehension subgroup results. \emph{American Annals of the Deaf}, \emph{138}(2), 172--175.
 
 \leavevmode\vadjust pre{\hypertarget{ref-kinnear_new_2002}{}}%
-Kinnear, P. R., \& Sahraie, A. (2002). New farnsworth-munsell 100 hue test norms of normal observers for each year of age 5--22 and for age decades 30--70. \emph{The British Journal of Ophthalmology}, \emph{86}(12), 1408--1411. Retrieved from \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1771429/}
+Kinnear, P. R., \& Sahraie, A. (2002). New farnsworth-munsell 100 hue test norms of normal observers for each year of age 5--22 and for age decades 30--70. \emph{The British Journal of Ophthalmology}, \emph{86}(12), 1408--1411. \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1771429/}
 
 \leavevmode\vadjust pre{\hypertarget{ref-kulas_post-stratification_2018}{}}%
 Kulas, J. T., Robinson, D. H., Smith, J. A., \& Kellar, D. Z. (2018). Post-stratification weighting in organizational surveys: A cross-disciplinary tutorial. \emph{Human Resource Management}.
 
 \leavevmode\vadjust pre{\hypertarget{ref-lord1961estimating}{}}%
-Lord, Frederic M. (1961). Estimating norms by item sampling. \emph{ETS Research Bulletin Series}, \emph{1961}(1), i--13.
+Lord, F. M. (1961). Estimating norms by item sampling. \emph{ETS Research Bulletin Series}, \emph{1961}(1), i--13.
 
 \leavevmode\vadjust pre{\hypertarget{ref-lord_estimating_1962}{}}%
-Lord, Frederic M. (1962). Estimating norms by item-sampling. \emph{Educational and Psychological Measurement}, \emph{22}(2), 259--267. \url{https://doi.org/10.1177/001316446202200202}
+Lord, F. M. (1962). Estimating norms by item-sampling. \emph{Educational and Psychological Measurement}, \emph{22}(2), 259--267. \url{https://doi.org/10.1177/001316446202200202}
 
 \leavevmode\vadjust pre{\hypertarget{ref-shl2011}{}}%
 Ltd., S. G. (2011). \emph{OPQ32r norm update technical documentation} {[}Technical Report{]}. SHL Group Ltd.
 
 \leavevmode\vadjust pre{\hypertarget{ref-R-anesrake}{}}%
-Pasek, J. (2018). \emph{Anesrake: ANES raking implementation}. Retrieved from \url{https://CRAN.R-project.org/package=anesrake}
+Pasek, J. (2018). \emph{Anesrake: ANES raking implementation}. \url{https://CRAN.R-project.org/package=anesrake}
 
 \leavevmode\vadjust pre{\hypertarget{ref-plumlee1964estimating}{}}%
 Plumlee, L. B. (1964). Estimating means and standard deviations from partial data---an empirical check on lord's item sampling technique. \emph{Educational and Psychological Measurement}, \emph{24}(3), 623--630.
 
 \leavevmode\vadjust pre{\hypertarget{ref-statistics_cps_2018}{}}%
-Statistics, B. of L. (2018). {CPS} tables. Retrieved May 1, 2018, from \url{https://www.bls.gov/cps/tables.htm}
+Statistics, B. of L. (2018). \emph{{CPS} tables}. \url{https://www.bls.gov/cps/tables.htm}
 
 \leavevmode\vadjust pre{\hypertarget{ref-tombaugh_60-item_1997}{}}%
 Tombaugh, T. N., \& Hubiey, A. M. (1997). The 60-item boston naming test: Norms for cognitively intact adults aged 25 to 88 years. \emph{Journal of Clinical and Experimental Neuropsychology}, \emph{19}(6), 922--932.
 
 \leavevmode\vadjust pre{\hypertarget{ref-yang_nonresponse_2017}{}}%
-Yang, Y., Kulas, J. T., \& Robinson, D. R. (2017, April). \emph{Nonresponse and sample weighting in organizational surveying}. Presented at the Society for industrial and organizational psychology.
+Yang, Y., Kulas, J. T., \& Robinson, D. R. (2017, April). \emph{Nonresponse and sample weighting in organizational surveying}. Society for industrial and organizational psychology.
 
 \leavevmode\vadjust pre{\hypertarget{ref-zec_normative_2007}{}}%
 Zec, R. F., Burkett, N. R., Markwell, S. J., \& Larsen, D. L. (2007). Normative data stratified for age, education, and gender on the boston naming test. \emph{The Clinical Neuropsychologist}, \emph{21}(4), 617--637. \url{https://doi.org/10.1080/13854040701339356}
