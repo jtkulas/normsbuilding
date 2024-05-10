@@ -2,8 +2,8 @@
 \ifnextchar[{\eatarg}{}
 
 \centering
-\includegraphics{NormsBuilding_files/figure-latex/Figure1-1.pdf}
-\caption{\label{fig:Figure1}Relationship between Study 1 concepts of population (A), traditional norms (B), and proposed norm building procedure (C).}
+\includegraphics{NormsBuilding_files/figure-latex/schematic-1.pdf}
+\caption{\label{fig:schematic}Relationship between Study 1 concepts of population (A), traditional norms (B), and proposed norm building procedure (C).}
 \end{figure*}
 \efloatseparator
  

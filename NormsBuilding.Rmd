@@ -25,7 +25,7 @@ author_note: |
   This reproducible research project is available for others thanks to rMarkdown and the papaja R package.
 
 abstract: |
-  Organizations that manage large-scale testing and assessment operations benefit from opportunities to strategically sample to construct norms that are representative of target populations (e.g., US workforce, college graduate, elementary school grade equivalent). We propose the application of a procedure most commonly retained as sample remediation (post-stratification weighting) as a method to "build" rather than funnel norms. This approach is leveraged and then evaluated against "population" values via controlled simulation. Norms are traditionally created through stratified sampling of larger distributions of data. Not all vendors or publishers have this luxury - some do simply not have access to large samples of respondents. We propose an alternative strategy that zeros in on the same goal: representative normative samples. 
+  Large-scale testing and assessment operations benefit from opportunities to strategically sample to construct norms that are representative of target populations (e.g., US workforce, college graduate, elementary school grade equivalent). We propose the application of a procedure most commonly retained in the context of sample remediation (post-stratification weighting) as a method to "build" rather than funnel norms. This approach is leveraged and then evaluated against "population" values via controlled simulation. Norms are traditionally created through stratified sampling of larger distributions of data. Not all vendors or publishers have this luxury - some do simply not have access to large samples of respondents. We propose an alternative strategy that zeros in on the same goal: representative normative samples. 
 
   
 keywords          : "assessment norms, post stratification weighting, norm construction, comparative norms"
@@ -72,39 +72,21 @@ library(Hmisc)
 set.seed(42)
 ```
 
-"Norms" are comparative distributions of psychological or educational assessment scores against which an individual examinee's absolute rating can be contrasted. Common normative metrics include standard scores (often some derivative of a *z*-score) and percentile ranks - both relating an examinee's score to its location within the normative sample (e.g., "norm"). The constituency of normative groups can be a marketable asset for assessment vendors. Possessing norms that include respondents representing competitive organizations might, for example, entice a new client to utilize an assessment for its benchmarking potential. Similarly, one vendor's possession of, for example, workforce representative norms may be a deciding factor regarding consultative partnership if another vendor *does not* have workforce representative norms. 
+"Norms" are distributions of psychological or educational assessment scores against which an individual examinee's absolute rating can be contrasted. Common normative metrics include standard scores (typically derivative of a *z*-score) and percentile ranks - both reflect an examinee's relative standing within the normative distribution (aka "norm"). The constituency of normative groups can be a marketable asset for assessment vendors. Having access to norms that include respondents representing populations of interest might, for example, entice a new client to utilize an assessment. Similarly, one vendor's possession of, for example, workforce representative norms may be a deciding factor regarding consultative partnership if another vendor *does not* have access to workforce representative norms. 
 
-Assessment "owners" who have access to large numbers of respondents have the luxury of tailoring their norms to a wide variety of desirable constituencies, and would therefore appear to hold advantage over smaller, boutique, or niche consultancies that may not have as much reach or opportunity to develop large norms bases. The OPQ32r, for example, in total possesses 92 unique static normative distributions culled from more than 200 thousand individuals, covering 24 languages and 37 countries/regions, as reported in its Norm Update Technical Documentation [@shl2011]. These norms are further differentiated by general population, general work population, managerial and professional, senior managers, graduate, and industry specific norms. This norm library is an absolute competitive advantage over other local and international vendors. 
+Assessment "owners" who have access to large representative samples of respondents have the luxury of tailoring their norms to a wide variety of desirable constituencies, and would therefore appear to hold advantage over smaller, boutique, or niche consultancies that may not have as great reach or opportunity to develop large norms bases. The OPQ32r, for example, in total possesses 92 unique static normative distributions culled from more than two-hundred thousand individuals, covering 24 languages and 37 countries/regions, as reported in its Norm Update Technical Documentation [@shl2011]. These norms are further differentiated by general population, general work population, managerial and professional, senior managers, graduate, and industry specific norms. This norm library is an absolute competitive advantage over other local and international vendors. 
 
 Traditionally,[^1] norms are developed in this manner - either simply collecting a very large number of responses (e.g., GRE, ACT, SAT) or stratified random sampling from such a large number of responses (or, more rarely in the context of psychological assessment - a fully representative population frame) to obtain a normative group of desired constituency. In the current paper, we explore an alternative to these traditional approaches whereby representative norm groups are "built up" from smaller respondent samples. We do this via application of a procedure that is intended to align sample constituencies with population parameters in post-survey administration contexts: post-stratification weighting [see, for example, @kulas_post-stratification_2018; @yang_nonresponse_2017]. 
 
 [^1]: Perhaps more appropriately, "*according to textbooks*". There is at least one mention of the currently explored "building up" procedure that is acknowledged in the published literature [@holt_stanford_1993]. It is possible that vendors have been engaging in this creative form of norms creation, but the procedure has not migrated to the published literature.
 
-Although not considered a typical approach, there is at least one record of something similar being done within the educational assessment domain - @holt_stanford_1993 describes one SAT 8th edition reading comprehension subgroup norm as being created via weighting (because of the uniqueness of the desired normative group - age representative deaf and hard of hearing students). This 1993 application is the only one we were able to locate within the published literature. The current investigation resurrects and investigates the viability of this strategy for those interested in creating representative norms (perhaps without the luxury of expansive data collection).
+Although not considered a typical approach, there is at least one record of something similar being done within the educational assessment domain - @holt_stanford_1993 describes one SAT 8th edition reading comprehension subgroup norm as being created via weighting (because of the uniqueness of the desired normative group - age representative deaf and hard-of-hearing students). This 1993 application is the sole example of a similar-minded methodology that we were able to locate within the published literature. The current investigation explicitly proposes and then investigates the viability of this strategy for those interested in creating representative norms (perhaps without the luxury of expansive data collection).
 
 ## A Brief Review of the Norms Development Process Implicated within the Measurement Literature
 
-@kinnear_new_2002 describe the development of norms for an eye test, strategically sampling equal numbers of males and females from ages 5 to 79, although the final normative constituency (*N* = 382) was ultimately comprised of individuals who opted in (e.g., a non-probability sample). The Boston Naming Test (BNT) has many age, education [e.g., @tombaugh_60-item_1997] and gender [e.g., @zec_normative_2007] stratified norms generated by various researchers. However, @hawkins2002norms review of available BNT norms revealed that only a few of them were adequately representative of the population and most norms were skewed by highly educated subjects. The norms for the Job Descriptive Index and Job in General measures of job satisfaction have been recently revised via stratified random sampling drawn from an online panel [to represent the US working population on key variables, resulting in the first US overall norms and subgroup norms; @gillespie2016normative]. 
+@kinnear_new_2002 describe the development of norms for an eye test, strategically sampling equal numbers of males and females from ages 5 to 79, although the final normative constituency (*N* = 382) was ultimately comprised of individuals who opted in (e.g., a non-probability sample). The Boston Naming Test (BNT) has many age, education [e.g., @tombaugh_60-item_1997] and gender [e.g., @zec_normative_2007] stratified norms generated by various researchers. However, @hawkins2002norms review of available BNT norms revealed that only a few of them were adequately representative of the population and most norms were skewed by highly educated subjects. The norms for the Job Descriptive Index and Job in General measures of job satisfaction have been recently revised via stratified random sampling drawn from an online panel [to represent the US working population on key variables, resulting in the first US overall norms and subgroup norms, @gillespie2016normative].
 
-Although seeking representative samples from larger populations comprises the traditional approach to norm-building, alternatives have historically been sought (much of this work seems to have peaked [and subsequently perhaps been abandoned] in the 1960's). @lord_estimating_1962 seems to have been one of the first attempts to seek alternative sampling methodologies. He describes a procedure first investigated in a 1961 project for the Educational Testing Service [e.g., ETS; @lord1961estimating] essentially sampling items instead of individuals (e.g., what provides a truer approximation of the population distribution - the entire measure administered to one respondent group or item parcels administered to different respondent groups?). In his first exploration, the "item sampling" approach was in fact deemed superior to the more traditional "respondent sampling" strategy, with @lord1961estimating concluding that such a strategy may be enticing to educational assessment professionals because it is less disruptive (administering smaller item sets requires less time commitment). @plumlee1964estimating also administered smaller item subsets to multiple samples of respondants. Both procedures administered smaller item subsets to smaller groups of respondents, and then aggregated from these multiple samples and item sets. The summary finding of each of these studies was that the item subgroup estimates provided better (closer to true normative) estimates than did sub-sample estimates. The current investigation revisits these concepts, but with: 1) controlled simulations, and 2) an alternative sample adjustment procedure (the investigations in the 1960's did not attempt weighting).
-
-# Methods
-
-This SIOP presentation utilizes simulations to test the efficacy of the weighting procedure. Figure 1 communicates our intent: to evaluate the viability of an alternative (C) to the commonly executed (B) norms-development strategy. First, we generate a "population" with known subgroup differences along a measured variable (for example, a summary "engagement" rating per individual), then randomly sample small subsets and build (via post-stratification weighting) representative normative groups. As an index of "how the procedure performs", we evaluate the normative distributions against the original population distributions, documenting which distributions (weighted versus unweighted) approximates the population better.
-
-## Procedure 
-
-Workforce representation was identified via the Bureau of Labor Statistics' Labor Force Statistics from the Current Population Survey [2017 Employed persons by detailed occupation, sex, race, and Hispanic or Latino ethnicity (Table 11); @statistics_cps_2018]. These are approximately 153,337,000 individuals aged 16 and older. The population percentages we specified (at the variable margin levels) are presented in the "Census Parameter" column of Table 1.
-
-"Populations" of 10,000 individuals were constructed with ethnic distributions of values specified as normal, positively skewed, or negatively skewed (in three different *across-group* patterns; see Table 1 - this was done to evaluate the impact of different distributional forms within differently sized subgroups). Occupation and gender were then randomly assigned at census parameters (for example, the 1,000 other, 1,200 black, and 7,800 white respondents were randomly assigned gender and occupational characteristics for purposes of multi-strata rating [e.g., aka "raking"]). From these 10,000 records, a random or stratified random[^2] sampling was performed at *n*'s of 100. The samplings were then raked using the *anesrake* [@R-anesrake] package within *R*. Across the six experimental conditions, populations were specified, sampled from, and raked 10,000 times each (e.g., each of the 60,000 total simulations estimated a different simulated population). 
-
-We varied the distributional forms of the three ethic groups, with the distribution of scores (1 to 5) representing negative (1) to positive (5) attitudes. In condition 1, for example, "Whites" realized a positively skewed distribution, "blacks" were represented with a negatively skewed distribution, and "asians and others" exhibited a normally distributed range of attitudes (Figure 2 presents one population simulation as an example of a Condition 1 set of subgroup distributions). 
-
-To evaluate the "quality" of the random, stratified random, and weighted samples, we collected distributional values at seven different percentile locations: the 5th, 10th, 25th, 50th, 75th, 90th, and 95th percentiles. These values were extracted from: 1) each simulated population, 2) each random or stratified random sampling, and 3) each weighted sample. Our criteria for "quality" of normative distribution was discrepancy from the population distributional values at each of the seven percentiles.
-
-[^2]: These terms are a bit misleading in the context of the current simulations - all samplings were random, but "stratified random" was approximated in conditions 1 through 3 (see Table 1) whereas differentially stratified was specified in conditions 4 through 6 (where we were interested in evaluating the efficacy of the weighting procedure with known biased [in terms of representative constituency] samples).
-
-```{r Figure1, echo=FALSE, fig.cap="Relationship between Study 1 concepts of population (A), traditional norms (B), and proposed norm building procedure (C)."}
+```{r schematic, echo=FALSE, fig.cap="Relationship between Study 1 concepts of population (A), traditional norms (B), and proposed norm building procedure (C)."}
 
 
 
@@ -114,6 +96,45 @@ grid.raster(figure)
 
 ```
 
+Although seeking representative samples from larger populations comprises the traditional approach to norm-building, alternatives have been sought. Much of this work seems to have peaked (and subsequently perhaps been abandoned) in the 1960's. @lord_estimating_1962 may have been one of the first to publicly disseminate an alternative strategy. He describes a procedure first investigated in a 1961 project for the Educational Testing Service [ETS, @lord1961estimating] essentially sampling items instead of individuals (e.g., what provides a truer approximation of the population distribution - the entire measure administered to one respondent group or item parcels administered to different respondent groups?). In his first exploration, the "item sampling" approach was in fact deemed superior to the more traditional "respondent sampling" strategy, with @lord1961estimating concluding that such a strategy may be enticing to educational assessment professionals because it is less disruptive (administering smaller item sets requires less time commitment). @plumlee1964estimating also administered smaller item subsets to multiple samples of respondants. Both procedures administered smaller item subsets to smaller groups of respondents, and then aggregated from these multiple samples and item sets. The summary finding of each of these studies was that the item subgroup estimates provided better (closer to true normative) estimates than did sub-sample estimates. The current investigation revisits these concepts, but with: 1) controlled simulations, and 2) an alternative sample adjustment procedure (the investigations in the 1960's did not attempt weighting). Figure \@ref(fig:schematic) communicates our intent: to evaluate the viability of an alternative (C) to the commonly executed (B) norms-development strategy.
+
+# Methods
+
+The current exploration utilizes simulations to test the efficacy of the weighting procedure. First, we generate a "population" with known subgroup differences along a measured variable representing a scale score from a Psychological inventory (for context, we refer to this as a summary "engagement" rating per individual). Next, we *randomly sample* subsets from these populations and build (via post-stratification weighting) representative normative groups. As an index of how the procedure performs, we evaluate the normative distributions against the original population distributions, documenting which distributions (weighted versus unweighted) closer approximates the population engagement value.
+
+## Procedure
+
+```{r census, echo=FALSE, results="asis"}
+
+Variable <- c("Gender","","","Ethnicity","","","","Industry","","","","")
+Level <- c("Male","Female","","White","Black","Asian or Other","","Management","Sales","Service","Production","Natural Resources")
+`Census Parameter` <- c("53%","47%","","78%","12%","10%","","40%","22%","17%","12%","9%")
+`Cond 1` <- c("","","","Pos Skew","Neg Skew","Normal","","","","","","")
+`Cond 2` <- c("","","","Normal","Pos Skew","Neg Skew","","","","","","")
+`Cond 3` <- c("","","","Neg Skew","Normal","Pos Skew","","","","","","")
+`Sampling Frequency` <- c("","","","33%","33%","34%","","","","","","")
+`Cond 4` <- c("","","","Pos Skew","Neg Skew","Normal","","","","","","")
+`Cond 5` <- c("","","","Normal","Pos Skew","Neg Skew","","","","","","")
+`Cond 6` <- c("","","","Neg Skew","Normal","Pos Skew","","","","","","")
+
+table1 <- cbind(Variable,Level,`Census Parameter`,`Cond 1`,`Cond 2`,`Cond 3`,`Sampling Frequency`,`Cond 4`,`Cond 5`,`Cond 6`)
+
+papaja::apa_table(table1,
+                  landscape=TRUE,
+                  font_size="footnotesize",
+                  note="Cell-level constituencies (e.g., percentage white male managers) were not available via census data.",
+                  col.names = c("Variable", "Level", "Census\nParameter", "Cond 1", "Cond 2", "Cond 3", "Sampling\nFrequency", "Cond 4", "Cond 5", "Cond 6")) 
+```
+
+Workforce representation was identified via the Bureau of Labor Statistics' Labor Force Statistics from the Current Population Survey [Employed persons by detailed occupation, sex, race, and Hispanic or Latino ethnicity ([Table 11](https://www.bls.gov/cps/cpsaat11.htm)), @statistics_cps_2018]. These are approximately 153,337,000 individuals aged 16 and older. The population percentages were specified at variable margin levels and these values are presented in the "Census Parameter" column of Table \@ref(tab:census).
+
+"Populations" of 10,000 individuals were constructed with ethnic distributions of values specified as normal, positively skewed, or negatively skewed (in three different *across-group* patterns; see Table \@ref(tab:census) - this was done to evaluate the impact of different distributional forms within differently sized subgroups). Occupation and gender were then randomly assigned at census parameters (for example, the 1,000 other, 1,200 black, and 7,800 white respondents were randomly assigned gender and occupational characteristics for purposes of multi-strata rating [e.g., aka "raking"]). From these 10,000 records, a random or stratified random[^2] sampling was performed at *n*'s of 100. The samplings were then raked using the *anesrake* [@R-anesrake] package within *R*. Across the six experimental conditions, populations were specified, sampled from, and raked 10,000 times each (e.g., each of the 60,000 total simulations estimated a different simulated population). 
+
+We varied the distributional forms of the three ethic groups, with the distribution of scores (1 to 5) representing negative (1) to positive (5) attitudes. In condition 1, for example, "Whites" realized a positively skewed distribution, "blacks" were represented with a negatively skewed distribution, and "asians and others" exhibited a normally distributed range of attitudes (Figure 2 presents one population simulation as an example of a Condition 1 set of subgroup distributions). 
+
+To evaluate the "quality" of the random, stratified random, and weighted samples, we collected distributional values at seven different percentile locations: the 5th, 10th, 25th, 50th, 75th, 90th, and 95th percentiles. These values were extracted from: 1) each simulated population, 2) each random or stratified random sampling, and 3) each weighted sample. Our criteria for "quality" of normative distribution was discrepancy from the population distributional values at each of the seven percentiles.
+
+[^2]: These terms are a bit misleading in the context of the current simulations - all samplings were random, but "stratified random" was approximated in conditions 1 through 3 (see Table \@ref(tab:census)) whereas differentially stratified was specified in conditions 4 through 6 (where we were interested in evaluating the efficacy of the weighting procedure with known biased [in terms of representative constituency] samples).
 
 ```{r Figure2, echo=FALSE, fig.cap="Example distributional forms (population specifications Condition 1)."}
 
@@ -151,28 +172,6 @@ hist(normal$value, breaks=18, main="", xlab="asian or other", xlim=c(1,5))
 ```
 
 The other demographic specifications (occupation and gender) were randomly assigned to the 10,000 ethnic cases (e.g., Table 1 percentages were specified and randomly assigned to cases).
-
-```{r Tab.1, echo=FALSE, results="asis"}
-
-Variable <- c("Gender","","","Ethnicity","","","","Industry","","","","")
-Level <- c("Male","Female","","White","Black","Asian or Other","","Management","Sales","Service","Production","Natural Resources")
-`Census Parameter` <- c("53%","47%","","78%","12%","10%","","40%","22%","17%","12%","9%")
-`Cond 1` <- c("","","","Pos Skew","Neg Skew","Normal","","","","","","")
-`Cond 2` <- c("","","","Normal","Pos Skew","Neg Skew","","","","","","")
-`Cond 3` <- c("","","","Neg Skew","Normal","Pos Skew","","","","","","")
-`Sampling Frequency` <- c("","","","33%","33%","34%","","","","","","")
-`Cond 4` <- c("","","","Pos Skew","Neg Skew","Normal","","","","","","")
-`Cond 5` <- c("","","","Normal","Pos Skew","Neg Skew","","","","","","")
-`Cond 6` <- c("","","","Neg Skew","Normal","Pos Skew","","","","","","")
-
-table1 <- cbind(Variable,Level,`Census Parameter`,`Cond 1`,`Cond 2`,`Cond 3`,`Sampling Frequency`,`Cond 4`,`Cond 5`,`Cond 6`)
-
-papaja::apa_table(table1,
-                  landscape=TRUE,
-                  font_size="footnotesize",
-                  note="Cell-level constituencies (e.g., percentage white male managers) were not available via census data.",
-                  col.names = c("Variable", "Level", "Census\nParameter", "Cond 1", "Cond 2", "Cond 3", "Sampling\nFrequency", "Cond 4", "Cond 5", "Cond 6")) 
-```
 
 # Results
 

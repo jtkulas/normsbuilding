@@ -7,14 +7,14 @@
 \footnotesize{
 
 \begin{longtable}{llllllllll}\noalign{\getlongtablewidth\global\LTcapwidth=\longtablewidth}
-\caption{\label{tab:Tab.1}}\\
+\caption{\label{tab:census}}\\
 \toprule
 Variable & Level & Census
 Parameter & Cond 1 & Cond 2 & Cond 3 & Sampling
 Frequency & Cond 4 & Cond 5 & Cond 6\\
 \midrule
 \endfirsthead
-\caption*{\normalfont{Table \ref{tab:Tab.1} continued}}\\
+\caption*{\normalfont{Table \ref{tab:census} continued}}\\
 \toprule
 Variable & Level & Census
 Parameter & Cond 1 & Cond 2 & Cond 3 & Sampling
